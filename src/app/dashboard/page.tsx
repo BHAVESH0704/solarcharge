@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +14,8 @@ import {
 import { mockStations } from "@/lib/data";
 import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
+import { BatteryCharging, Power, Thermometer, Zap, Map as MapIcon, LocateFixed } from "lucide-react";
+import Image from "next/image";
 
 export default function DashboardPage() {
   const getStatusClass = (status: StationStatus) => {
@@ -37,48 +39,73 @@ export default function DashboardPage() {
         <h1 className="text-lg font-semibold md:text-2xl">Station Dashboard</h1>
         <Button>Add New Station</Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {mockStations.map((station) => (
-          <Card key={station.id}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{station.name}</CardTitle>
-              <Badge variant={station.status === 'Available' ? 'default' : 'secondary'} className={cn(
-                  "border-transparent text-primary-foreground",
-                  station.status === 'Available' && 'bg-green-600 hover:bg-green-700',
-                  station.status === 'Charging' && 'bg-blue-600 hover:bg-blue-700',
-                  (station.status === 'Unavailable' || station.status === 'Maintenance') && 'bg-destructive hover:bg-destructive/90',
-              )}>
-                {station.status}
-              </Badge>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{station.id}</div>
-              <p className="text-xs text-muted-foreground">{station.location}</p>
-              <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-primary" />
-                  <span>{station.powerOutput.toFixed(1)} kW</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <BatteryCharging className="h-4 w-4 text-primary" />
-                  <span>{station.energyConsumed.toFixed(1)} kWh</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Power className="h-4 w-4 text-primary" />
-                  <span>{station.connectorType}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Thermometer className="h-4 w-4 text-primary" />
-                  <span>25 °C</span>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end gap-2">
-                <Button variant="outline" size="sm" disabled={station.status !== 'Charging'}>Stop</Button>
-                <Button size="sm" disabled={station.status !== 'Available'}>Start Charge</Button>
-            </CardFooter>
-          </Card>
-        ))}
+
+      <div className="grid gap-6 mt-4 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+            <div className="grid gap-4 md:grid-cols-2">
+                {mockStations.slice(0, 4).map((station) => (
+                  <Card key={station.id}>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">{station.name}</CardTitle>
+                      <Badge variant={station.status === 'Available' ? 'default' : 'secondary'} className={cn(
+                          "border-transparent text-primary-foreground",
+                          station.status === 'Available' && 'bg-green-600 hover:bg-green-700',
+                          station.status === 'Charging' && 'bg-blue-600 hover:bg-blue-700',
+                          (station.status === 'Unavailable' || station.status === 'Maintenance') && 'bg-destructive hover:bg-destructive/90',
+                      )}>
+                        {station.status}
+                      </Badge>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{station.id}</div>
+                      <p className="text-xs text-muted-foreground">{station.location}</p>
+                      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Zap className="h-4 w-4 text-primary" />
+                          <span>{station.powerOutput.toFixed(1)} kW</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <BatteryCharging className="h-4 w-4 text-primary" />
+                          <span>{station.energyConsumed.toFixed(1)} kWh</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Power className="h-4 w-4 text-primary" />
+                          <span>{station.connectorType}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Thermometer className="h-4 w-4 text-primary" />
+                          <span>25 °C</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" disabled={station.status !== 'Charging'}>Stop</Button>
+                        <Button size="sm" disabled={station.status !== 'Available'}>Start Charge</Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+            </div>
+        </div>
+        <div className="lg:col-span-2">
+             <Card className="h-full">
+                <CardHeader>
+                    <CardTitle>Station Map</CardTitle>
+                    <CardDescription>Live overview of your station network.</CardDescription>
+                </CardHeader>
+                <CardContent className="h-full min-h-[400px] flex flex-col items-center justify-center">
+                    <div className="relative w-full h-full flex-grow rounded-lg overflow-hidden">
+                        <Image src="https://placehold.co/600x400.png" data-ai-hint="map city" alt="Map of stations" layout="fill" className="object-cover" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-sm">
+                            <div className="text-center p-4 rounded-lg">
+                                <LocateFixed className="h-12 w-12 text-primary mx-auto mb-2" />
+                                <h3 className="text-xl font-bold">Interactive Map Coming Soon</h3>
+                                <p className="text-muted-foreground">Visualize your entire network in real-time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+             </Card>
+        </div>
       </div>
     </>
   );
