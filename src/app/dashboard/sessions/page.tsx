@@ -79,7 +79,7 @@ export default function SessionsPage() {
                           </TableCell>
                           <TableCell>{session.duration}</TableCell>
                           <TableCell className="text-right">{session.energyConsumed.toFixed(2)}</TableCell>
-                          <TableCell className="text-right">${session.cost.toFixed(2)}</TableCell>
+                          <TableCell className="text-right">₹{session.cost.toFixed(2)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
