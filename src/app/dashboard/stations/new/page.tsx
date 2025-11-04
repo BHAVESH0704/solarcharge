@@ -53,16 +53,18 @@ export default function AddStationPage() {
     defaultValues: {
       name: "",
       location: "",
+      powerOutput: "" as any, // Fix: a default value for powerOutput
       connectorType: "Type 2",
       status: "Available",
     },
   });
 
   async function onSubmit(data: AddStationFormValues) {
+    if (!firestore) return;
     const stationsCollection = collection(firestore, 'chargingStations');
     
     try {
-      await addDocumentNonBlocking(stationsCollection, {
+      addDocumentNonBlocking(stationsCollection, {
         ...data,
         energyConsumed: 0, // Initial value
         lat: 18.5204, // Default Pune lat
