@@ -3,8 +3,8 @@ import type { Station, Session, EnergyDataPoint } from "./types";
 export const mockStations: Station[] = [
   {
     id: "SC-001",
-    name: "Koramangala Supercharge",
-    location: "123 MG Road, Bangalore",
+    name: "Koregaon Park Power-Up",
+    location: "Lane 7, Koregaon Park, Pune",
     status: "Available",
     powerOutput: 7.2,
     energyConsumed: 45.3,
@@ -12,8 +12,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-002",
-    name: "Bandra Solar Hub",
-    location: "456 Hill Road, Mumbai",
+    name: "Viman Nagar Volt",
+    location: "Near Symbiosis College, Viman Nagar, Pune",
     status: "Charging",
     powerOutput: 50.1,
     energyConsumed: 120.8,
@@ -21,8 +21,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-003",
-    name: "Connaught Place Retail",
-    location: "789 Outer Circle, Delhi",
+    name: "Deccan Gymkhana Charge",
+    location: "FC Road, Deccan Gymkhana, Pune",
     status: "Available",
     powerOutput: 11.5,
     energyConsumed: 88.1,
@@ -30,8 +30,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-004",
-    name: "Jubilee Hills Library",
-    location: "101 Film Nagar, Hyderabad",
+    name: "Hinjewadi IT Park Hub",
+    location: "Phase 1, Hinjewadi, Pune",
     status: "Unavailable",
     powerOutput: 0,
     energyConsumed: 32.5,
@@ -39,8 +39,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-005",
-    name: "T. Nagar Industrial",
-    location: "212 G.N. Chetty Road, Chennai",
+    name: "Baner-Balewadi ChargePoint",
+    location: "High Street, Baner, Pune",
     status: "Maintenance",
     powerOutput: 0,
     energyConsumed: 67.4,
@@ -48,8 +48,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-006",
-    name: "Candolim Beach Front",
-    location: "333 Beach Road, Goa",
+    name: "Magarpatta City Charge",
+    location: "Cybercity, Magarpatta, Pune",
     status: "Available",
     powerOutput: 22.0,
     energyConsumed: 15.6,
