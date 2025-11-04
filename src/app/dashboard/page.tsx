@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { collection } from "firebase/firestore";
 import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
@@ -68,7 +67,7 @@ export default function DashboardPage() {
               <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-primary" />
-                  <span>{station.id}</span>
+                  <span>{station.id.substring(0, 6)}...</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <BatteryCharging className="h-4 w-4 text-primary" />
@@ -87,7 +86,16 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+      
+      {!isLoading && stations?.length === 0 && (
+        <div className="text-center py-20 rounded-lg border-2 border-dashed border-border mt-4">
+            <h2 className="text-xl font-semibold">No Stations Found</h2>
+            <p className="text-muted-foreground mt-2">You haven't added any charging stations yet.</p>
+            <Button asChild className="mt-4">
+                <Link href="/dashboard/stations/new">Add Your First Station</Link>
+            </Button>
+        </div>
+      )}
     </>
   );
 }
-
