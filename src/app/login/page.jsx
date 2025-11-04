@@ -6,17 +6,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/icons";
-import { useAuth, initiateEmailSignIn } from "@/firebase";
+import { useAuth } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useUser } from "@/firebase/provider";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const auth = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const { user, isUserLoading } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -24,9 +28,23 @@ export default function LoginPage() {
     }
   }, [user, isUserLoading, router]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    initiateEmailSignIn(auth, email, password);
+    if (!auth) return;
+    setIsLoggingIn(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Let the useEffect handle redirection
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Invalid email or password. Please try again.",
+      });
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
   
   if (isUserLoading || user) {
@@ -61,8 +79,10 @@ export default function LoginPage() {
                   </div>
                   <Input id="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
                 </div>
-                <Button type="submit" className="w-full">Login</Button>
-                <Button variant="outline" className="w-full">
+                <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                  {isLoggingIn ? 'Logging in...' : 'Login'}
+                </Button>
+                <Button variant="outline" className="w-full" aria-label="Login with RFID or QR Code">
                   Login with RFID or QR Code
                 </Button>
               </div>
