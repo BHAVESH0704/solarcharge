@@ -13,17 +13,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { mockStations } from "@/lib/data";
-import type { Station, StationStatus } from "@/lib/types";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
+import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { collection } from "firebase/firestore";
 import { PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const firestore = useFirestore();
+  const stationsQuery = useMemoFirebase(() => collection(firestore, 'chargingStations'), [firestore]);
+  const { data: stations, isLoading } = useCollection(stationsQuery);
 
-  const filteredStations = mockStations.filter((station) =>
+  const filteredStations = stations?.filter((station) =>
     station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     station.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -71,7 +76,24 @@ export default function StationsPage() {
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredStations.map((station) => (
+        {isLoading && Array.from({ length: 8 }).map((_, i) => (
+          <Card key={i}>
+             <CardHeader>
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-40 w-full mb-4" />
+                <Skeleton className="h-4 w-1/2 mb-2" />
+                <Skeleton className="h-4 w-1/3" />
+              </CardContent>
+              <CardFooter className="flex justify-end gap-2">
+                <Skeleton className="h-9 w-20" />
+                <Skeleton className="h-9 w-24" />
+              </CardFooter>
+          </Card>
+        ))}
+        {filteredStations?.map((station) => (
           <Card key={station.id} className="flex flex-col">
             <CardHeader>
               <div className="flex justify-between items-start">
@@ -82,7 +104,7 @@ export default function StationsPage() {
             </CardHeader>
             <CardContent className="flex-grow">
               <div className="relative h-40 w-full mb-4">
-                <Image src={`https://placehold.co/400x300.png`} data-ai-hint="charging station" alt={station.name} layout="fill" className="rounded-md object-cover"/>
+                <Image src={`https://placehold.co/400x300.png`} data-ai-hint="charging station" alt={station.name} fill className="rounded-md object-cover"/>
               </div>
               <div className="text-sm text-muted-foreground space-y-1">
                 <p>Connector: <span className="font-semibold text-foreground">{station.connectorType}</span></p>

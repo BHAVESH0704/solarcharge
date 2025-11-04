@@ -30,12 +30,15 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { useFirestore, addDocumentNonBlocking } from "@/firebase";
+import { collection } from "firebase/firestore";
 
 const addStationFormSchema = z.object({
   name: z.string().min(1, "Station name is required."),
   location: z.string().min(1, "Location is required."),
   connectorType: z.enum(["Type 2", "CCS", "CHAdeMO"]),
   powerOutput: z.coerce.number().min(1, "Power output must be greater than 0."),
+  status: z.enum(["Available", "Charging", "Unavailable", "Maintenance"]),
 });
 
 type AddStationFormValues = z.infer<typeof addStationFormSchema>;
@@ -43,6 +46,7 @@ type AddStationFormValues = z.infer<typeof addStationFormSchema>;
 export default function AddStationPage() {
   const { toast } = useToast();
   const router = useRouter();
+  const firestore = useFirestore();
 
   const form = useForm<AddStationFormValues>({
     resolver: zodResolver(addStationFormSchema),
@@ -50,16 +54,34 @@ export default function AddStationPage() {
       name: "",
       location: "",
       connectorType: "Type 2",
+      status: "Available",
     },
   });
 
-  function onSubmit(data: AddStationFormValues) {
-    console.log(data);
-    toast({
-      title: "Station Added",
-      description: `The station "${data.name}" has been successfully registered.`,
-    });
-    router.push("/dashboard/stations");
+  async function onSubmit(data: AddStationFormValues) {
+    const stationsCollection = collection(firestore, 'chargingStations');
+    
+    try {
+      await addDocumentNonBlocking(stationsCollection, {
+        ...data,
+        energyConsumed: 0, // Initial value
+        lat: 18.5204, // Default Pune lat
+        lng: 73.8567, // Default Pune lng
+      });
+
+      toast({
+        title: "Station Added",
+        description: `The station "${data.name}" has been successfully registered.`,
+      });
+      router.push("/dashboard/stations");
+    } catch (error) {
+      console.error("Error adding station:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to add the station. Please try again.",
+      });
+    }
   }
 
   return (
@@ -138,9 +160,31 @@ export default function AddStationPage() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select initial status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Available">Available</SelectItem>
+                        <SelectItem value="Maintenance">Maintenance</SelectItem>
+                        <SelectItem value="Unavailable">Unavailable</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="flex gap-2">
                 <Button type="submit" aria-label="Submit new station form">Add Station</Button>
-                <Button variant="outline" onClick={() => router.back()} aria-label="Cancel and go back">
+                <Button variant="outline" type="button" onClick={() => router.back()} aria-label="Cancel and go back">
                   Cancel
                 </Button>
               </div>

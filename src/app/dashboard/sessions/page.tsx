@@ -25,10 +25,28 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { mockSessions } from "@/lib/data";
-import { format } from "date-fns";
+import { useCollection, useFirestore, useUser, useMemoFirebase } from "@/firebase";
+import { collection, query, where, Timestamp } from "firebase/firestore";
+import { format, formatDistance } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SessionsPage() {
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+
+  const sessionsQuery = useMemoFirebase(() => 
+    user ? query(collection(firestore, `users/${user.uid}/chargingSessions`)) : null,
+    [firestore, user]
+  );
+  const { data: sessions, isLoading: isSessionsLoading } = useCollection(sessionsQuery);
+
+  const getDuration = (start: Timestamp, end: Timestamp) => {
+    if (!start || !end) return "-";
+    return formatDistance(end.toDate(), start.toDate(), { includeSeconds: true });
+  }
+
+  const isLoading = isUserLoading || isSessionsLoading;
+
   return (
     <>
       <h1 className="text-lg font-semibold md:text-2xl mb-4">
@@ -72,19 +90,33 @@ export default function SessionsPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {mockSessions.map((session) => (
+                      {isLoading && Array.from({length: 5}).map((_, i) => (
+                        <TableRow key={i}>
+                          <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                          <TableCell><Skeleton className="h-5 w-40" /></TableCell>
+                          <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                          <TableCell className="text-right"><Skeleton className="h-5 w-16 ml-auto" /></TableCell>
+                          <TableCell className="text-right"><Skeleton className="h-5 w-16 ml-auto" /></TableCell>
+                        </TableRow>
+                      ))}
+                      {sessions?.map((session) => (
                         <TableRow key={session.id}>
                           <TableCell className="font-medium">{session.stationId}</TableCell>
                           <TableCell>
-                            {format(session.startTime, "PPP p")}
+                            {session.startTime ? format(session.startTime.toDate(), "PPP p") : "-"}
                           </TableCell>
-                          <TableCell>{session.duration}</TableCell>
-                          <TableCell className="text-right">{session.energyConsumed.toFixed(2)}</TableCell>
-                          <TableCell className="text-right">₹{session.cost.toFixed(2)}</TableCell>
+                          <TableCell>{getDuration(session.startTime, session.endTime)}</TableCell>
+                          <TableCell className="text-right">{session.energyConsumed?.toFixed(2)}</TableCell>
+                          <TableCell className="text-right">₹{session.cost?.toFixed(2)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
+                   {sessions?.length === 0 && !isLoading && (
+                    <div className="text-center py-10 text-muted-foreground">
+                      No session history found.
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

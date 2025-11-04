@@ -9,27 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { mockStations } from "@/lib/data";
+import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
 import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { collection } from "firebase/firestore";
 import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardPage() {
-  const getStatusClass = (status: StationStatus) => {
-    switch (status) {
-      case "Available":
-        return "bg-green-500";
-      case "Charging":
-        return "bg-blue-500";
-      case "Unavailable":
-        return "bg-red-500";
-      case "Maintenance":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
+  const firestore = useFirestore();
+  const stationsQuery = useMemoFirebase(() => collection(firestore, 'chargingStations'), [firestore]);
+  const { data: stations, isLoading } = useCollection(stationsQuery);
 
   return (
     <>
@@ -41,7 +32,24 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {mockStations.map((station) => (
+        {isLoading && Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader>
+              <Skeleton className="h-5 w-3/4" />
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-4 w-full" />
+               <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-full" />
+                  <Skeleton className="h-5 w-full" />
+                </div>
+            </CardContent>
+          </Card>
+        ))}
+        {stations?.map((station) => (
           <Card key={station.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{station.name}</CardTitle>
@@ -60,11 +68,11 @@ export default function DashboardPage() {
               <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-primary" />
-                  <span>{station.powerOutput.toFixed(1)} kW</span>
+                  <span>{station.powerOutput?.toFixed(1)} kW</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <BatteryCharging className="h-4 w-4 text-primary" />
-                  <span>{station.energyConsumed.toFixed(1)} kWh</span>
+                  <span>{station.energyConsumed?.toFixed(1)} kWh</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Power className="h-4 w-4 text-primary" />

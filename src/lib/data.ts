@@ -1,4 +1,8 @@
 import type { Station, Session, EnergyDataPoint } from "./types";
+import { Timestamp } from "firebase/firestore";
+
+// This file now primarily serves as a reference for data shapes or for fallback data.
+// The main application data is now fetched from Firestore.
 
 export const mockStations: Station[] = [
   {
@@ -23,88 +27,18 @@ export const mockStations: Station[] = [
     lat: 18.5679,
     lng: 73.9143
   },
-  {
-    id: "SC-003",
-    name: "Deccan Gymkhana Charge",
-    location: "FC Road, Deccan Gymkhana, Pune",
-    status: "Available",
-    powerOutput: 11.5,
-    energyConsumed: 88.1,
-    connectorType: "Type 2",
-    lat: 18.5204,
-    lng: 73.8475
-  },
-  {
-    id: "SC-004",
-    name: "Hinjewadi IT Park Hub",
-    location: "Phase 1, Hinjewadi, Pune",
-    status: "Unavailable",
-    powerOutput: 0,
-    energyConsumed: 32.5,
-    connectorType: "CHAdeMO",
-    lat: 18.5912,
-    lng: 73.7389
-  },
-  {
-    id: "SC-005",
-    name: "Baner-Balewadi ChargePoint",
-    location: "High Street, Baner, Pune",
-    status: "Maintenance",
-    powerOutput: 0,
-    energyConsumed: 67.4,
-    connectorType: "CCS",
-    lat: 18.5602,
-    lng: 73.7799
-  },
-  {
-    id: "SC-006",
-    name: "Magarpatta City Charge",
-    location: "Cybercity, Magarpatta, Pune",
-    status: "Available",
-    powerOutput: 22.0,
-    energyConsumed: 15.6,
-    connectorType: "Type 2",
-    lat: 18.5193,
-    lng: 73.9317
-  },
 ];
 
 export const mockSessions: Session[] = [
   {
     id: "SESS-101",
+    userId: "user-123",
     stationId: "SC-002",
-    startTime: new Date(new Date().setDate(new Date().getDate() - 1)),
-    endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(new Date().getHours() + 2)),
+    startTime: Timestamp.fromDate(new Date(new Date().setDate(new Date().getDate() - 1))),
+    endTime: Timestamp.fromDate(new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(new Date().getHours() + 2))),
     duration: "2h 15m",
     energyConsumed: 42.5,
     cost: 850.00,
-  },
-  {
-    id: "SESS-102",
-    stationId: "SC-003",
-    startTime: new Date(new Date().setDate(new Date().getDate() - 2)),
-    endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 2)).setHours(new Date().getHours() + 1)),
-    duration: "1h 30m",
-    energyConsumed: 30.1,
-    cost: 602.00,
-  },
-  {
-    id: "SESS-103",
-    stationId: "SC-001",
-    startTime: new Date(new Date().setDate(new Date().getDate() - 3)),
-    endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 3)).setHours(new Date().getHours() + 4)),
-    duration: "4h 5m",
-    energyConsumed: 25.8,
-    cost: 516.00,
-  },
-  {
-    id: "SESS-104",
-    stationId: "SC-006",
-    startTime: new Date(new Date().setDate(new Date().getDate() - 4)),
-    endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 4)).setHours(new Date().getHours() + 3)),
-    duration: "3h 22m",
-    energyConsumed: 55.2,
-    cost: 1104.00,
   },
 ];
 

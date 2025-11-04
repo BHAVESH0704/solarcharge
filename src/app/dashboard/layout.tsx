@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +24,11 @@ import {
   Menu,
   Settings,
   User,
+  LogOut,
 } from "lucide-react";
 import { Icons } from "@/components/icons";
+import { useAuth, useUser } from "@/firebase";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardLayout({
   children,
@@ -33,6 +36,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+
+  const handleLogout = () => {
+    auth.signOut();
+    router.push('/login');
+  };
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -42,6 +53,11 @@ export default function DashboardLayout({
     { href: "/dashboard/smart-charge", label: "Smart Charge", icon: Bot },
     { href: "/dashboard/profile", label: "Profile", icon: User },
   ];
+  
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return "U";
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
 
   const NavLinks = () => (
     <nav aria-label="Main navigation" className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -63,6 +79,40 @@ export default function DashboardLayout({
     </nav>
   );
 
+  if (isUserLoading) {
+     return (
+      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+        <div className="hidden border-r bg-muted/40 md:block">
+          <div className="flex h-full max-h-screen flex-col gap-2">
+            <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+               <Skeleton className="h-8 w-32" />
+            </div>
+            <div className="flex-1 p-4 space-y-4">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+          </div>
+        </div>
+         <div className="flex flex-col">
+           <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 justify-end">
+             <Skeleton className="h-10 w-10 rounded-full" />
+           </header>
+           <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-background">
+             <Skeleton className="h-32 w-full" />
+             <Skeleton className="h-64 w-full" />
+           </main>
+         </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push('/login');
+    return null;
+  }
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -82,7 +132,7 @@ export default function DashboardLayout({
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="shrink-0 md:hidden">
+              <Button variant="outline" size="icon" className="shrink-0 md:hidden" aria-label="Toggle navigation menu">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
@@ -104,14 +154,14 @@ export default function DashboardLayout({
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full" aria-label="Toggle user menu">
                 <Avatar>
-                  <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="user avatar" />
-                  <AvatarFallback>U</AvatarFallback>
+                  <AvatarImage src={user?.photoURL || "https://placehold.co/40x40.png"} alt={user?.displayName || "User"} data-ai-hint="user avatar" />
+                  <AvatarFallback>{getInitials(user?.displayName)}</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{user?.displayName || 'My Account'}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href="/dashboard/profile">
@@ -119,15 +169,14 @@ export default function DashboardLayout({
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/login">
-                  Logout
-                </Link>
+              <DropdownMenuItem onClick={handleLogout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Logout</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

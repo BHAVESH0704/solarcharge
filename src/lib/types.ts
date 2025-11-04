@@ -1,3 +1,5 @@
+import type { Timestamp } from "firebase/firestore";
+
 export type StationStatus = "Available" | "Charging" | "Unavailable" | "Maintenance";
 
 export interface Station {
@@ -15,14 +17,24 @@ export interface Station {
 export interface Session {
   id: string;
   stationId: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: Timestamp;
+  endTime: Timestamp;
   duration: string;
   energyConsumed: number; // in kWh
   cost: number;
+  userId: string;
 }
 
 export interface EnergyDataPoint {
   time: string;
   value: number;
+}
+
+export interface UserProfile {
+  id: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  vehicleModel?: string;
+  photoURL?: string;
 }
