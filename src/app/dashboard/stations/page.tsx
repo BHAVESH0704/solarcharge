@@ -16,8 +16,9 @@ import { Input } from "@/components/ui/input";
 import { mockStations } from "@/lib/data";
 import type { Station, StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
+import Link from "next/link";
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,11 +54,18 @@ export default function StationsPage() {
               className="pl-8 sm:w-[300px]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search stations by name or location"
             />
           </div>
-          <Button variant="outline">
+          <Button variant="outline" aria-label="Filter stations">
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             Filters
+          </Button>
+          <Button asChild aria-label="Add a new charging station">
+             <Link href="/dashboard/stations/new">
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Add Station
+             </Link>
           </Button>
         </div>
       </div>

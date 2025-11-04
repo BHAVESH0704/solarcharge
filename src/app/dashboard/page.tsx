@@ -13,6 +13,7 @@ import { mockStations } from "@/lib/data";
 import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const getStatusClass = (status: StationStatus) => {
@@ -34,7 +35,9 @@ export default function DashboardPage() {
     <>
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Station Dashboard</h1>
-        <Button aria-label="Add a new charging station">Add New Station</Button>
+        <Button asChild aria-label="Add a new charging station">
+          <Link href="/dashboard/stations/new">Add New Station</Link>
+        </Button>
       </div>
 
       <div className="grid gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
