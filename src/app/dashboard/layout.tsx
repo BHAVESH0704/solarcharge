@@ -29,6 +29,7 @@ import {
 import { Icons } from "@/components/icons";
 import { useAuth, useUser } from "@/firebase";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
@@ -40,8 +41,16 @@ export default function DashboardLayout({
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
 
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [isUserLoading, user, router]);
+
   const handleLogout = () => {
-    auth.signOut();
+    if (auth) {
+      auth.signOut();
+    }
     router.push('/login');
   };
 
@@ -79,7 +88,7 @@ export default function DashboardLayout({
     </nav>
   );
 
-  if (isUserLoading) {
+  if (isUserLoading || !user) {
      return (
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <div className="hidden border-r bg-muted/40 md:block">
@@ -106,11 +115,6 @@ export default function DashboardLayout({
          </div>
       </div>
     );
-  }
-
-  if (!user) {
-    router.push('/login');
-    return null;
   }
 
   return (
