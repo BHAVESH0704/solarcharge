@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from 'next/dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,8 @@ import type { Station, StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { List, Map, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
+
+const MapComponent = dynamic(() => import('@/components/map-component'), { ssr: false });
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -98,11 +101,11 @@ export default function StationsPage() {
           ))}
         </div>
       ) : (
-         <Card className="flex-grow flex items-center justify-center flex-col">
-            <Map className="h-16 w-16 text-muted-foreground mb-4" />
-            <h2 className="text-2xl font-bold">Map View Coming Soon</h2>
-            <p className="text-muted-foreground">An interactive map of all our stations will be available here.</p>
-         </Card>
+        <Card className="flex-grow">
+          <CardContent className="h-full w-full p-0">
+            <MapComponent stations={filteredStations} />
+          </CardContent>
+        </Card>
       )}
     </div>
   );

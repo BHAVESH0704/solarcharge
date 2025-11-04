@@ -9,6 +9,8 @@ export const mockStations: Station[] = [
     powerOutput: 7.2,
     energyConsumed: 45.3,
     connectorType: "Type 2",
+    lat: 18.5362,
+    lng: 73.8937
   },
   {
     id: "SC-002",
@@ -18,6 +20,8 @@ export const mockStations: Station[] = [
     powerOutput: 50.1,
     energyConsumed: 120.8,
     connectorType: "CCS",
+    lat: 18.5679,
+    lng: 73.9143
   },
   {
     id: "SC-003",
@@ -27,6 +31,8 @@ export const mockStations: Station[] = [
     powerOutput: 11.5,
     energyConsumed: 88.1,
     connectorType: "Type 2",
+    lat: 18.5204,
+    lng: 73.8475
   },
   {
     id: "SC-004",
@@ -36,6 +42,8 @@ export const mockStations: Station[] = [
     powerOutput: 0,
     energyConsumed: 32.5,
     connectorType: "CHAdeMO",
+    lat: 18.5912,
+    lng: 73.7389
   },
   {
     id: "SC-005",
@@ -45,6 +53,8 @@ export const mockStations: Station[] = [
     powerOutput: 0,
     energyConsumed: 67.4,
     connectorType: "CCS",
+    lat: 18.5602,
+    lng: 73.7799
   },
   {
     id: "SC-006",
@@ -54,6 +64,8 @@ export const mockStations: Station[] = [
     powerOutput: 22.0,
     energyConsumed: 15.6,
     connectorType: "Type 2",
+    lat: 18.5193,
+    lng: 73.9317
   },
 ];
 

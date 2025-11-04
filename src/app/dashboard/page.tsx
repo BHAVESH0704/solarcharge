@@ -14,8 +14,11 @@ import {
 import { mockStations } from "@/lib/data";
 import type { StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { BatteryCharging, Power, Thermometer, Zap, Map as MapIcon, LocateFixed } from "lucide-react";
-import Image from "next/image";
+import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
+import dynamic from 'next/dynamic';
+
+const MapComponent = dynamic(() => import('@/components/map-component'), { ssr: false });
+
 
 export default function DashboardPage() {
   const getStatusClass = (status: StationStatus) => {
@@ -92,17 +95,8 @@ export default function DashboardPage() {
                     <CardTitle>Station Map</CardTitle>
                     <CardDescription>Live overview of your station network.</CardDescription>
                 </CardHeader>
-                <CardContent className="h-full min-h-[400px] flex flex-col items-center justify-center">
-                    <div className="relative w-full h-full flex-grow rounded-lg overflow-hidden">
-                        <Image src="https://placehold.co/600x400.png" data-ai-hint="map city" alt="Map of stations" layout="fill" className="object-cover" />
-                        <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-                            <div className="text-center p-4 rounded-lg">
-                                <LocateFixed className="h-12 w-12 text-primary mx-auto mb-2" />
-                                <h3 className="text-xl font-bold">Interactive Map Coming Soon</h3>
-                                <p className="text-muted-foreground">Visualize your entire network in real-time.</p>
-                            </div>
-                        </div>
-                    </div>
+                <CardContent className="h-full min-h-[400px] p-0">
+                  <MapComponent stations={mockStations} />
                 </CardContent>
              </Card>
         </div>

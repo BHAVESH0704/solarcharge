@@ -8,6 +8,8 @@ export interface Station {
   powerOutput: number; // in kW
   energyConsumed: number; // in kWh today
   connectorType: "Type 2" | "CCS" | "CHAdeMO";
+  lat: number;
+  lng: number;
 }
 
 export interface Session {
