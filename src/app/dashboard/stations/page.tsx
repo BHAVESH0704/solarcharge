@@ -1,7 +1,7 @@
+
 "use client";
 
 import { useState } from "react";
-import dynamic from 'next/dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,17 +16,11 @@ import { Input } from "@/components/ui/input";
 import { mockStations } from "@/lib/data";
 import type { Station, StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { List, Map, Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
-
-const MapComponent = dynamic(() => import('@/components/map-component'), { 
-  ssr: false,
-  loading: () => <div className="h-full w-full bg-muted animate-pulse rounded-lg" />,
-});
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const filteredStations = mockStations.filter((station) =>
     station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,51 +59,35 @@ export default function StationsPage() {
             <SlidersHorizontal className="h-4 w-4 mr-2" />
             Filters
           </Button>
-          <div className="bg-muted p-0.5 rounded-lg flex items-center">
-             <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('list')}>
-                <List className="h-5 w-5"/>
-             </Button>
-             <Button variant={viewMode === 'map' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('map')}>
-                <Map className="h-5 w-5"/>
-             </Button>
-          </div>
         </div>
       </div>
       
-      {viewMode === "list" ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredStations.map((station) => (
-            <Card key={station.id} className="flex flex-col">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle>{station.name}</CardTitle>
-                  <Badge variant="outline" className={cn("text-xs", getStatusClass(station.status))}>{station.status}</Badge>
-                </div>
-                <CardDescription>{station.location}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <div className="relative h-40 w-full mb-4">
-                  <Image src={`https://placehold.co/400x300.png`} data-ai-hint="charging station" alt={station.name} layout="fill" className="rounded-md object-cover"/>
-                </div>
-                <div className="text-sm text-muted-foreground space-y-1">
-                  <p>Connector: <span className="font-semibold text-foreground">{station.connectorType}</span></p>
-                  <p>Power: <span className="font-semibold text-foreground">{station.powerOutput} kW</span></p>
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-end gap-2">
-                <Button variant="outline" size="sm">Details</Button>
-                <Button size="sm">Navigate</Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <Card className="flex-grow">
-          <CardContent className="h-full w-full p-0">
-            <MapComponent stations={filteredStations} />
-          </CardContent>
-        </Card>
-      )}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredStations.map((station) => (
+          <Card key={station.id} className="flex flex-col">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <CardTitle>{station.name}</CardTitle>
+                <Badge variant="outline" className={cn("text-xs", getStatusClass(station.status))}>{station.status}</Badge>
+              </div>
+              <CardDescription>{station.location}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow">
+              <div className="relative h-40 w-full mb-4">
+                <Image src={`https://placehold.co/400x300.png`} data-ai-hint="charging station" alt={station.name} layout="fill" className="rounded-md object-cover"/>
+              </div>
+              <div className="text-sm text-muted-foreground space-y-1">
+                <p>Connector: <span className="font-semibold text-foreground">{station.connectorType}</span></p>
+                <p>Power: <span className="font-semibold text-foreground">{station.powerOutput} kW</span></p>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-end gap-2">
+              <Button variant="outline" size="sm">Details</Button>
+              <Button size="sm">Navigate</Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
