@@ -62,7 +62,7 @@ export default function DashboardPage() {
               </Badge>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{station.powerOutput?.toFixed(1)} kW</div>
+              <div className="text-2xl font-bold">{typeof station.powerOutput === 'number' ? station.powerOutput.toFixed(1) : '-'} kW</div>
               <p className="text-xs text-muted-foreground">{station.location}</p>
               <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <BatteryCharging className="h-4 w-4 text-primary" />
-                  <span>{station.energyConsumed?.toFixed(1)} kWh</span>
+                  <span>{typeof station.energyConsumed === 'number' ? station.energyConsumed.toFixed(1) : '-'} kWh</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Power className="h-4 w-4 text-primary" />
