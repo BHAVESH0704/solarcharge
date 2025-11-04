@@ -58,7 +58,7 @@ service cloud.firestore {
     }
 
     /**
-     * @description Allows public read access to charging station data, but restricts writes.
+     * @description Allows public read access to charging station data, but restricts writes to authenticated users.
      * @path /chargingStations/{stationId}
      * @allow (get) Any user can read charging station data.
      *        true
@@ -67,8 +67,12 @@ service cloud.firestore {
      * @principle Allows public reads, restricts writes to authorized sources.
      */
     match /chargingStations/{stationId} {
+      function isAuthenticated() {
+        return request.auth != null;
+      }
+
       allow get, list: if true;
-      allow create, update, delete: if false; // TODO: Add admin role check for writes.
+      allow create, update, delete: if isAuthenticated();
     }
 
     /**
