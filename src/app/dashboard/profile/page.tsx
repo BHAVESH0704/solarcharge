@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -78,7 +79,7 @@ export default function ProfilePage() {
                 <CardDescription>{form.watch("email")}</CardDescription>
             </CardHeader>
             <CardContent className="text-center">
-               <Button variant="outline">Change Photo</Button>
+               <Button variant="outline" aria-label="Change profile photo">Change Photo</Button>
             </CardContent>
            </Card>
         </div>
@@ -148,7 +149,7 @@ export default function ProfilePage() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Update Profile</Button>
+                  <Button type="submit" aria-label="Submit profile updates">Update Profile</Button>
                 </form>
               </Form>
             </CardContent>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -43,7 +44,7 @@ export default function DashboardLayout({
   ];
 
   const NavLinks = () => (
-    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+    <nav aria-label="Main navigation" className="grid items-start px-2 text-sm font-medium lg:px-4">
       {navItems.map(({ href, label, icon: Icon }) => (
         <Link
           key={href}
@@ -53,6 +54,7 @@ export default function DashboardLayout({
               ? "bg-muted text-primary"
               : "text-muted-foreground"
           }`}
+          aria-current={pathname === href ? "page" : undefined}
         >
           <Icon className="h-4 w-4" />
           {label}
@@ -66,7 +68,7 @@ export default function DashboardLayout({
       <div className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Link href="/" className="flex items-center gap-2 font-semibold">
+            <Link href="/" className="flex items-center gap-2 font-semibold" aria-label="SolarCharge Home">
               <Icons.logo className="h-6 w-6 text-primary" />
               <span className="">SolarCharge</span>
             </Link>
@@ -87,7 +89,7 @@ export default function DashboardLayout({
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
               <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 mb-4">
-                <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Link href="/" className="flex items-center gap-2 font-semibold" aria-label="SolarCharge Home">
                   <Icons.logo className="h-6 w-6 text-primary" />
                   <span className="">SolarCharge</span>
                 </Link>
@@ -100,7 +102,7 @@ export default function DashboardLayout({
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
+              <Button variant="secondary" size="icon" className="rounded-full" aria-label="Toggle user menu">
                 <Avatar>
                   <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="user avatar" />
                   <AvatarFallback>U</AvatarFallback>

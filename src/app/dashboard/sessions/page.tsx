@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -37,10 +38,10 @@ export default function SessionsPage() {
         <div className="lg:col-span-2">
           <Tabs defaultValue="history">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="active">Active Sessions</TabsTrigger>
-              <TabsTrigger value="history">Session History</TabsTrigger>
+              <TabsTrigger value="active" aria-controls="active-sessions-panel">Active Sessions</TabsTrigger>
+              <TabsTrigger value="history" aria-controls="session-history-panel">Session History</TabsTrigger>
             </TabsList>
-            <TabsContent value="active">
+            <TabsContent value="active" id="active-sessions-panel" role="tabpanel" tabIndex={0}>
               <Card>
                 <CardHeader>
                   <CardTitle>No Active Sessions</CardTitle>
@@ -51,7 +52,7 @@ export default function SessionsPage() {
                 </CardHeader>
               </Card>
             </TabsContent>
-            <TabsContent value="history">
+            <TabsContent value="history" id="session-history-panel" role="tabpanel" tabIndex={0}>
               <Card>
                 <CardHeader>
                   <CardTitle>Session History</CardTitle>
@@ -108,7 +109,7 @@ export default function SessionsPage() {
                     <Label htmlFor="duration">Charging Duration (minutes)</Label>
                     <Input id="duration" type="number" placeholder="e.g., 120" />
                   </div>
-                  <Button className="w-full">Initiate Charge</Button>
+                  <Button className="w-full" aria-label="Initiate new charging session">Initiate Charge</Button>
                 </div>
               </form>
             </CardContent>

@@ -34,7 +34,7 @@ export default function DashboardPage() {
     <>
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold md:text-2xl">Station Dashboard</h1>
-        <Button>Add New Station</Button>
+        <Button aria-label="Add a new charging station">Add New Station</Button>
       </div>
 
       <div className="grid gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
