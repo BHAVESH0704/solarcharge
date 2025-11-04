@@ -19,7 +19,10 @@ import { cn } from "@/lib/utils";
 import { List, Map, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
 
-const MapComponent = dynamic(() => import('@/components/map-component'), { ssr: false });
+const MapComponent = dynamic(() => import('@/components/map-component'), { 
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-muted animate-pulse rounded-lg" />,
+});
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");

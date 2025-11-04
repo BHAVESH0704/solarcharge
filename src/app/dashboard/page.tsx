@@ -17,7 +17,10 @@ import { cn } from "@/lib/utils";
 import { BatteryCharging, Power, Thermometer, Zap } from "lucide-react";
 import dynamic from 'next/dynamic';
 
-const MapComponent = dynamic(() => import('@/components/map-component'), { ssr: false });
+const MapComponent = dynamic(() => import('@/components/map-component'), { 
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-muted animate-pulse rounded-lg" />,
+});
 
 
 export default function DashboardPage() {
