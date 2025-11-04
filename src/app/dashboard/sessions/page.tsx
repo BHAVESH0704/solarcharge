@@ -35,7 +35,7 @@ export default function SessionsPage() {
   const firestore = useFirestore();
 
   const sessionsQuery = useMemoFirebase(() => 
-    user ? query(collection(firestore, `users/${user.uid}/chargingSessions`)) : null,
+    (user && user.uid) ? query(collection(firestore, `users/${user.uid}/chargingSessions`)) : null,
     [firestore, user]
   );
   const { data: sessions, isLoading: isSessionsLoading } = useCollection(sessionsQuery);
