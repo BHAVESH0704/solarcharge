@@ -3,8 +3,8 @@ import type { Station, Session, EnergyDataPoint } from "./types";
 export const mockStations: Station[] = [
   {
     id: "SC-001",
-    name: "Downtown Supercharge",
-    location: "123 Main St, Metropolis",
+    name: "Koramangala Supercharge",
+    location: "123 MG Road, Bangalore",
     status: "Available",
     powerOutput: 7.2,
     energyConsumed: 45.3,
@@ -12,8 +12,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-002",
-    name: "Uptown Solar Hub",
-    location: "456 Oak Ave, Star City",
+    name: "Bandra Solar Hub",
+    location: "456 Hill Road, Mumbai",
     status: "Charging",
     powerOutput: 50.1,
     energyConsumed: 120.8,
@@ -21,8 +21,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-003",
-    name: "Eastside Retail Park",
-    location: "789 Pine Ln, Gotham",
+    name: "Connaught Place Retail",
+    location: "789 Outer Circle, Delhi",
     status: "Available",
     powerOutput: 11.5,
     energyConsumed: 88.1,
@@ -30,8 +30,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-004",
-    name: "Westend Library",
-    location: "101 Maple Dr, Central City",
+    name: "Jubilee Hills Library",
+    location: "101 Film Nagar, Hyderabad",
     status: "Unavailable",
     powerOutput: 0,
     energyConsumed: 32.5,
@@ -39,8 +39,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-005",
-    name: "North Industrial Zone",
-    location: "212 Birch Rd, Coast City",
+    name: "T. Nagar Industrial",
+    location: "212 G.N. Chetty Road, Chennai",
     status: "Maintenance",
     powerOutput: 0,
     energyConsumed: 67.4,
@@ -48,8 +48,8 @@ export const mockStations: Station[] = [
   },
   {
     id: "SC-006",
-    name: "South Beach Front",
-    location: "333 Ocean Blvd, Atlantis",
+    name: "Candolim Beach Front",
+    location: "333 Beach Road, Goa",
     status: "Available",
     powerOutput: 22.0,
     energyConsumed: 15.6,
@@ -65,7 +65,7 @@ export const mockSessions: Session[] = [
     endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 1)).setHours(new Date().getHours() + 2)),
     duration: "2h 15m",
     energyConsumed: 42.5,
-    cost: 12.75,
+    cost: 850.00,
   },
   {
     id: "SESS-102",
@@ -74,7 +74,7 @@ export const mockSessions: Session[] = [
     endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 2)).setHours(new Date().getHours() + 1)),
     duration: "1h 30m",
     energyConsumed: 30.1,
-    cost: 9.03,
+    cost: 602.00,
   },
   {
     id: "SESS-103",
@@ -83,7 +83,7 @@ export const mockSessions: Session[] = [
     endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 3)).setHours(new Date().getHours() + 4)),
     duration: "4h 5m",
     energyConsumed: 25.8,
-    cost: 7.74,
+    cost: 516.00,
   },
   {
     id: "SESS-104",
@@ -92,7 +92,7 @@ export const mockSessions: Session[] = [
     endTime: new Date(new Date(new Date().setDate(new Date().getDate() - 4)).setHours(new Date().getHours() + 3)),
     duration: "3h 22m",
     energyConsumed: 55.2,
-    cost: 16.56,
+    cost: 1104.00,
   },
 ];
 

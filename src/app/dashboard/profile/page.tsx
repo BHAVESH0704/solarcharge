@@ -39,10 +39,10 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 const defaultValues: Partial<ProfileFormValues> = {
-  fullName: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 234 567 890",
-  vehicleModel: "Tesla Model 3",
+  fullName: "Aarav Sharma",
+  email: "aarav.sharma@example.com",
+  phone: "+91 98765 43210",
+  vehicleModel: "Tata Nexon EV",
 };
 
 export default function ProfilePage() {
@@ -72,7 +72,7 @@ export default function ProfilePage() {
             <CardHeader className="items-center">
                  <Avatar className="h-24 w-24 mb-4">
                     <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>AS</AvatarFallback>
                 </Avatar>
                 <CardTitle>{form.watch("fullName")}</CardTitle>
                 <CardDescription>{form.watch("email")}</CardDescription>
@@ -142,7 +142,7 @@ export default function ProfilePage() {
                       <FormItem>
                         <FormLabel>Vehicle Model</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., Tesla Model Y" {...field} />
+                          <Input placeholder="e.g., Tata Nexon EV" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
