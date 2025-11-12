@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from 'next/dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,12 @@ import { PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+
+// Dynamically import the Map component with SSR turned off
+const Map = dynamic(() => import('@/components/Map'), { 
+  ssr: false,
+  loading: () => <Skeleton className="h-[400px] w-full rounded-md" />
+});
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,6 +80,14 @@ export default function StationsPage() {
              </Link>
           </Button>
         </div>
+      </div>
+      
+      <div className="mb-6">
+        {isLoading ? (
+           <Skeleton className="h-[400px] w-full rounded-md" />
+        ) : (
+          stations && <Map stations={stations} />
+        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
