@@ -82,7 +82,11 @@ export default function StationsPage() {
       </div>
 
       <div className="mb-6">
-        <Map stations={filteredStations || []} />
+        {isLoading ? (
+           <Skeleton className="h-[400px] w-full mb-6 rounded-lg" />
+        ) : (
+           <Map stations={filteredStations || []} />
+        )}
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -122,7 +126,7 @@ export default function StationsPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
-              <Button variant="outline" size="sm" asChild>
+               <Button variant="outline" size="sm" asChild>
                 <Link href={`/dashboard/stations/${station.id}`}>Details</Link>
               </Button>
               <Button size="sm" asChild>
