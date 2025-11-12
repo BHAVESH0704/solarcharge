@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sun, UserCheck, Zap, Bot, BarChart, MapPin } from 'lucide-react';
+import { Sun, UserCheck, Zap, BarChart, MapPin } from 'lucide-react';
 import { Icons } from '@/components/icons';
 
 export default function Home() {
@@ -16,11 +16,6 @@ export default function Home() {
       icon: <UserCheck className="h-8 w-8 text-primary" />,
       title: 'Secure Authentication',
       description: 'Authorized charging access via RFID or QR code, ensuring a secure and personal experience.',
-    },
-    {
-      icon: <Bot className="h-8 w-8 text-primary" />,
-      title: 'Smart Recommendations',
-      description: 'Our AI provides optimized charging schedules to save you money and support the grid.',
     },
     {
       icon: <BarChart className="h-8 w-8 text-primary" />,

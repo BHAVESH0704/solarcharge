@@ -16,8 +16,6 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   BarChart2,
-  Bot,
-  ChevronDown,
   History,
   LayoutDashboard,
   MapPin,
@@ -59,7 +57,6 @@ export default function DashboardLayout({
     { href: "/dashboard/stations", label: "Stations", icon: MapPin },
     { href: "/dashboard/sessions", label: "Sessions", icon: History },
     { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2 },
-    { href: "/dashboard/smart-charge", label: "Smart Charge", icon: Bot },
     { href: "/dashboard/profile", label: "Profile", icon: User },
   ];
   
