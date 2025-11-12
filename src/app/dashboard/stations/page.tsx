@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from 'next/dynamic';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,13 +15,18 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useCollection, useFirestore, useMemoFirebase } from "@/firebase";
-import type { StationStatus } from "@/lib/types";
+import type { Station, StationStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { collection } from "firebase/firestore";
 import { PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import Image from 'next/image';
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const Map = dynamic(() => import('@/components/Map'), { 
+  ssr: false,
+  loading: () => <Skeleton className="h-[400px] w-full mb-6 rounded-lg" />
+});
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -29,9 +35,9 @@ export default function StationsPage() {
   const { data: stations, isLoading } = useCollection(stationsQuery);
 
   const filteredStations = stations?.filter((station) =>
-    station.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    station.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    (station.name && station.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (station.location && station.location.toLowerCase().includes(searchTerm.toLowerCase()))
+  ) as Station[] | undefined;
   
   const getStatusClass = (status: StationStatus) => {
     switch (status) {
@@ -73,6 +79,10 @@ export default function StationsPage() {
              </Link>
           </Button>
         </div>
+      </div>
+
+      <div className="mb-6">
+        <Map stations={filteredStations || []} />
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
