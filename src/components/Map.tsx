@@ -1,9 +1,11 @@
+
 "use client";
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import { Station } from '@/lib/types';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
 
 // Fix for default icon not showing in Next.js
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
