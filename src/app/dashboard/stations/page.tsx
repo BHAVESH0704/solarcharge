@@ -23,10 +23,10 @@ import Image from 'next/image';
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Map = dynamic(() => import('@/components/Map'), { 
-  ssr: false,
-  loading: () => <Skeleton className="h-[400px] w-full mb-6 rounded-lg" />
-});
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const Popup = dynamic(() => import('react-leaflet').then(mod => mod.Popup), { ssr: false });
 
 export default function StationsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,6 +51,8 @@ export default function StationsPage() {
         return "bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-300 dark:border-yellow-700";
     }
   };
+  
+  const position: [number, number] = [18.5204, 73.8567]; // Pune coordinates
 
   return (
     <div className="flex flex-col h-full">
@@ -81,11 +83,27 @@ export default function StationsPage() {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-6 h-[400px] w-full rounded-lg bg-muted">
         {isLoading ? (
-           <Skeleton className="h-[400px] w-full mb-6 rounded-lg" />
+           <Skeleton className="h-full w-full rounded-lg" />
         ) : (
-           <Map stations={filteredStations || []} />
+          <MapContainer key="map-instance" center={position} zoom={12} style={{ height: '100%', width: '100%', borderRadius: '0.5rem' }}>
+              <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {filteredStations?.map(station => (
+                  (station.lat && station.lng) && (
+                      <Marker key={station.id} position={[station.lat, station.lng]}>
+                          <Popup>
+                              <b>{station.name}</b><br />
+                              {station.location}<br />
+                              Status: {station.status}
+                          </Popup>
+                      </Marker>
+                  )
+              ))}
+          </MapContainer>
         )}
       </div>
       
