@@ -112,8 +112,14 @@ export default function StationsPage() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end gap-2">
-              <Button variant="outline" size="sm">Details</Button>
-              <Button size="sm">Navigate</Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/dashboard/stations/${station.id}`}>Details</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href={`https://www.google.com/maps/search/?api=1&query=${station.lat},${station.lng}`} target="_blank" rel="noopener noreferrer">
+                  Navigate
+                </Link>
+              </Button>
             </CardFooter>
           </Card>
         ))}
